@@ -1,0 +1,8 @@
+apply from:'gradle/spring-cloud-contract.gradle'
+apply from:'gradle/spring-cloud-streams.gradle'
+
+dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
+}

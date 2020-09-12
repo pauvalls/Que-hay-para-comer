@@ -1,0 +1,8 @@
+pitest {
+  piTestVersion = "${piTestVersion}"
+  targetTests = ['com.lookiero.appname.*']
+  testPlugin = 'junit5'
+  outputFormats = ['XML', 'HTML']
+  threads = Runtime.runtime.availableProcessors()
+  timestampedReports = false
+}

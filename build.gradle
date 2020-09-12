@@ -1,0 +1,55 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
+  }
+  configurations.maybeCreate('pitest')
+  dependencies {
+    pitest "org.pitest:pitest-junit5-plugin:${pitestJunit5Version}"
+  }
+}
+
+plugins {
+  id 'org.sonarqube'
+}
+
+ext {
+  jacocoEnabled = System.properties.getProperty("jacocoEnabled") ?
+      System.properties.getProperty("jacocoEnabled").toBoolean() : false
+}
+
+subprojects {
+  repositories {
+    maven {
+      url = 'https://mvn.lookiero.tech/repository/releases'
+      credentials {
+        username System.getenv('LOOKIERO_ARCHIVA_USER')
+        password System.getenv('LOOKIERO_ARCHIVA_PASSWORD')
+      }
+    }
+    maven {
+      url = 'https://mvn.lookiero.tech/repository/snapshots'
+      credentials {
+        username System.getenv('LOOKIERO_ARCHIVA_USER')
+        password System.getenv('LOOKIERO_ARCHIVA_PASSWORD')
+      }
+    }
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+
+  apply plugin: 'java'
+
+  if (jacocoEnabled) {
+    project.logger.lifecycle(project.getName()+ ': Applying jacoco build file: ../gradle/jacoco.gradle')
+    apply from: '../gradle/jacoco.gradle'
+  }
+
+  group = 'com.lookiero'
+  version = '0.1.0-SNAPSHOT'
+  sourceCompatibility = '11'
+}

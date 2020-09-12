@@ -1,0 +1,71 @@
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.yaml:snakeyaml:${snakeyamlVersion}"
+  }
+}
+
+final String timestamp = (new Date()).format('yyyyMMddHHmmss')
+final Map<String, Object> appConfig = new Yaml()
+    .load( new File("${project.projectDir}/src/main/resources/application.yml").newInputStream())
+
+ext.gitBranch = {
+  String branch = ''
+  try {
+    final Process proc = 'git rev-parse --abbrev-ref HEAD'.execute()
+    proc.in.eachLine { final line -> branch = line }
+    proc.err.eachLine { final line -> println line }
+    proc.waitFor()
+  } catch (ex) {
+    branch = 'master'
+  }
+  branch
+}
+
+dependencies {
+  liquibaseRuntime "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+  liquibaseRuntime "com.vladmihalcea:hibernate-types-52:${hibernateTypes52Version}"
+  liquibaseRuntime 'org.postgresql:postgresql'
+  liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
+  liquibaseRuntime "org.liquibase:liquibase-core:${liquibaseCoreVersion}"
+  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernateVersion}"
+  liquibaseRuntime project(':appname-back.infrastructure')
+  liquibaseRuntime sourceSets.main.output
+}
+
+liquibase {
+  final String aReferenceUrl = "hibernate:spring:${jpaEntitiesPackage}?" +
+      "dialect=${appConfig.spring.jpa.'database-platform'}&amp;" +
+      "hibernate.physical_naming_strategy=${appConfig.spring.jpa.hibernate.naming.'physical-strategy'}&amp;" +
+      "hibernate.implicit_naming_strategy=${appConfig.spring.jpa.hibernate.naming.'implicit-strategy'}"
+
+  activities {
+    main {
+      changeLogFile 'liquibase-changelog.xml'
+      referenceUrl aReferenceUrl
+      url "${appConfig.spring.datasource.url}"
+      username "${appConfig.spring.datasource.username}"
+      password "${appConfig.spring.datasource.password}"
+      driver "$liquibaseDatabaseDriver"
+      defaultSchemaName ''
+      logLevel 'debug'
+      classpath "${project.rootDir}/${liquibaseChangeLogPath}"
+    }
+    diff {
+      changeLogFile "src/main/resources/db/migrations/changelog/${timestamp}.${gitBranch.call()}.postgresql.sql"
+      referenceUrl aReferenceUrl
+      url "${appConfig.spring.datasource.url}"
+      username "${appConfig.spring.datasource.username}"
+      password "${appConfig.spring.datasource.password}"
+      driver "$liquibaseDatabaseDriver"
+      defaultSchemaName ''
+      logLevel 'debug'
+      classpath "$buildDir/classes/java/main"
+    }
+  }
+  runList = project.hasProperty('runList') ? project.ext.runList : 'main'
+}

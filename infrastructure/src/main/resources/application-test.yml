@@ -1,0 +1,10 @@
+server:
+  address: 0.0.0.0
+  port: 9080
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url:  'jdbc:postgresql://db:5432/appname?autoReconnect=true&useSSL=false'

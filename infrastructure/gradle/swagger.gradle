@@ -1,0 +1,7 @@
+dependencies {
+  implementation "io.swagger:swagger-annotations:${swaggerAnnotationsVersion}"
+  if(System.getProperty("spring.profiles.active") != "prod") {
+    implementation "com.lookiero.common.swagger-starter:swagger-starter:${swaggerStarterVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+  }
+}

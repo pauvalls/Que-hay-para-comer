@@ -1,0 +1,23 @@
+plugins {
+    id 'io.freefair.lombok'
+    id 'info.solidsoft.pitest'
+}
+
+apply from:'../gradle/lombok.gradle'
+apply from:'../gradle/junit5.gradle'
+apply from:'../gradle/pitest.gradle'
+
+dependencies {
+    implementation "javax.validation:validation-api:${beanValidationVersion}"
+    implementation "javax.transaction:javax.transaction-api:${javaxTransactionVersion}"
+
+    implementation "com.lookiero.common.messagebus:core:${messageBusVersion}"
+
+    implementation "com.lookiero.common.request-response-management:error:${requestResponseManagementVersion}"
+    implementation "com.lookiero.common.request-response-management:bean-validation:${requestResponseManagementVersion}"
+
+    testImplementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
+    testImplementation "org.hibernate.validator:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
+    testImplementation "javax.el:javax.el-api:${javaxElApiVersion}"
+    testImplementation "org.glassfish.web:javax.el:${javaxElVersion}"
+}

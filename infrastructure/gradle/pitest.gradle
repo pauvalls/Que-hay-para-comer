@@ -1,0 +1,9 @@
+pitest {
+  excludedClasses = [
+      'com.lookiero.appname.contract.*',
+      'com.lookiero.appname.infrastructure.delivery.springboot.config.*'
+  ]
+  excludedTestClasses = [
+      'com.lookiero.appname.**.*IntegrationTest'
+  ]
+}

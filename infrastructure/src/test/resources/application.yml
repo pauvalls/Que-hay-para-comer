@@ -1,0 +1,10 @@
+info:
+  app:
+    name: App Name
+    description: App Description.
+    version: ${version?:unknown}
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+

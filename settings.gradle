@@ -1,0 +1,33 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://mvn.lookiero.tech/repository/releases'
+            credentials {
+                username System.getenv('LOOKIERO_ARCHIVA_USER')
+                password System.getenv('LOOKIERO_ARCHIVA_PASSWORD')
+            }
+        }
+        gradlePluginPortal()
+    }
+    plugins {
+        id 'org.springframework.boot' version springBootVersion
+        id 'org.springframework.cloud.contract' version springCloudContractVersion
+        id 'org.liquibase.gradle' version liquidbaseGradleVersion
+        id 'com.lookiero.tkiero' version tkieroVersion
+        id 'info.solidsoft.pitest' version pitestPluginVersion
+        id 'io.freefair.lombok' version lombokPluginVersion
+        id 'com.adarshr.test-logger' version testLoggerPluginVersion
+        id 'org.sonarqube' version sonarqubeVersion
+        id 'com.avast.gradle.docker-compose' version dockerComposePluginVersion
+    }
+}
+
+rootProject.name = 'appname-back'
+
+include 'appname-back.domain'
+project(':appname-back.domain').projectDir = file('domain')
+include 'appname-back.application'
+project(':appname-back.application').projectDir = file('application')
+include 'appname-back.infrastructure'
+project(':appname-back.infrastructure').projectDir = file('infrastructure')

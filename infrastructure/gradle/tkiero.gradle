@@ -1,0 +1,21 @@
+apply plugin: 'com.lookiero.tkiero'
+apply plugin: 'docker-compose'
+
+tkiero {
+  testAPI = true
+}
+
+dockerCompose {
+  environment.put "APPNAME_BACK_VERSION", version
+  useComposeFiles = ['src/e2eTest/resources/docker/docker-compose.yml']
+  isRequiredBy(project.tasks.e2eTest)
+  buildBeforeUp = true
+
+  captureContainersOutput = true
+  captureContainersOutputToFile = project.file('build/e2e-compose-output.txt')
+  composeLogToFile = project.file('build/e2e-compose-logs.txt')
+}
+
+e2eTest {
+  systemProperty 'profile', "${profile}"
+}

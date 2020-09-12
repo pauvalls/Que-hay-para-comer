@@ -1,0 +1,90 @@
+info:
+  app:
+    name: App Name
+    description: App Description.
+    version: ${version?:unknown}
+
+server:
+  address: localhost
+  port: 9080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+com:
+  lookiero:
+    common:
+      requestresponse:
+        web:
+          logging:
+            before: 'Request INIT'
+            after: 'Request END'
+spring:
+  cloud:
+    stream:
+      binders:
+        rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                prt: 5672
+                username: guest
+                password: guest
+                virtual-host: /
+      bindings:
+        input:
+          binder: rabbit
+          destination: exchangename.exchange
+          group: queuename.queue
+          contentType: application/json
+          consumer:
+            concurrency: 5
+            maxAttempts: 3
+            backOffInitialInterval: 10000
+            backOffMaxInterval: 1000000
+            backOffMultiplier: 2
+        output:
+          binder: rabbit
+          destination: exchangename.exchange
+          contentType: application/json
+      rabbit:
+        bindings:
+          input:
+            consumer:
+              autoBindDlq: true
+              republishToDlq: true
+              bindingRoutingKey: topicname
+              declareExchange: false
+              prefetch: 5
+              maxConcurrency: 2
+          output:
+            producer:
+              routingKeyExpression: headers['topic']
+              transacted: true
+  jpa:
+    database-platform: 'org.hibernate.dialect.PostgreSQL9Dialect'
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: 'org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl'
+        implicit-strategy: 'org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl'
+    open-in-view: false
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+  datasource:
+    url:  'jdbc:postgresql://localhost:54320/appname?autoReconnect=true&useSSL=false'
+    username: lookiero
+    password: password
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    log-resolved-exception: false
+

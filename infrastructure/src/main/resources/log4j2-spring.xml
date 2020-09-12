@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout
+        pattern="%style{%d{ISO8601}}{black} %highlight{%-4level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"/>
+    </Console>
+
+    <RollingFile
+      fileName="./logs/${hostName}-appname-back.log"
+      filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i.log.gz"
+      name="RollingFile">
+      <PatternLayout pattern="%d %p [%t] %C{1.}: %m%n"/>
+      <Policies>
+        <OnStartupTriggeringPolicy/>
+        <SizeBasedTriggeringPolicy
+          size="10 MB"/>
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <Logger additivity="false" level="INFO" name="com.lookiero.appname">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Logger>
+    <Logger additivity="false" level="DEBUG" name="org.hibernate.SQL">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger additivity="false" level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger additivity="false" level="DEBUG" name="org.springframework.jdbc.core.JdbcTemplate">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger additivity="false" level="TRACE" name="org.springframework.jdbc.core.StatementCreatorUtils">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <!--
+    Logging Handler issue
+    https://github.com/spring-cloud/spring-cloud-stream/issues/1510
+    -->
+    <Logger additivity="false" level="OFF" name="org.springframework.integration.handler.LoggingHandler">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Logger>
+    <Root level="INFO">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Root>
+  </Loggers>
+</Configuration>

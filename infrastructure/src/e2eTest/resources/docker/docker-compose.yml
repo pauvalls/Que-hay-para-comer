@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  appname-back:
+    depends_on:
+      - db
+      - rabbit
+    build:
+      context: ./../../../../
+      dockerfile: ./src/e2eTest/resources/docker/Dockerfile
+      args:
+        - APPNAME_BACK_VERSION=$APPNAME_BACK_VERSION
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9080:9080"
+  db:
+    image: postgres:11.5-alpine
+    ports:
+      - "127.0.0.1:54320:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/appname
+      POSTGRES_USER: lookiero
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appname
+  rabbit:
+    image: rabbitmq:3.7-management-alpine
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:9090:15672"

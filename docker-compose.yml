@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:11.5-alpine
+    container_name: appname_postgres
+    restart: always
+    ports:
+      - "54320:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/appname
+      POSTGRES_USER: lookiero
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appname
+    volumes:
+      - ./volumes/database:/var/lib/postgresql/data/appname
+  rabbit:
+    image: rabbitmq:3.7-management-alpine
+    container_name: lookiero_rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "9090:15672"
+    volumes:
+      - ./volumes/rabbit:/var/lib/rabbitmq
