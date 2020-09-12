@@ -11,11 +11,6 @@ dependencies {
     implementation "javax.validation:validation-api:${beanValidationVersion}"
     implementation "javax.transaction:javax.transaction-api:${javaxTransactionVersion}"
 
-    implementation "com.lookiero.common.messagebus:core:${messageBusVersion}"
-
-    implementation "com.lookiero.common.request-response-management:error:${requestResponseManagementVersion}"
-    implementation "com.lookiero.common.request-response-management:bean-validation:${requestResponseManagementVersion}"
-
     testImplementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
     testImplementation "org.hibernate.validator:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
     testImplementation "javax.el:javax.el-api:${javaxElApiVersion}"

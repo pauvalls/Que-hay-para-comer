@@ -1,7 +1,6 @@
 plugins {
   id 'org.springframework.boot'
   id 'org.liquibase.gradle'
-  id 'com.lookiero.tkiero'
   id 'org.springframework.cloud.contract'
   id 'com.avast.gradle.docker-compose'
   id 'io.freefair.lombok'
@@ -14,17 +13,13 @@ apply from:'../gradle/pitest.gradle'
 
 apply from:'gradle/springboot.gradle'
 apply from:'gradle/spring-cloud.gradle'
-apply from:'gradle/swagger.gradle'
 apply from:'gradle/pitest.gradle'
-apply from:'gradle/tkiero.gradle'
 apply from:'gradle/liquibase.gradle'
 
 dependencies {
   implementation project(':appname-back.domain')
   implementation project(':appname-back.application')
 
-  implementation "com.lookiero.common.messagebus:infrastructure-starter:${messageBusVersion}"
-  implementation "com.lookiero.common.request-response-management:infrastructure-starter:${requestResponseManagementVersion}"
 
   testImplementation "io.github.classgraph:classgraph:${classgraphVersion}"
 }

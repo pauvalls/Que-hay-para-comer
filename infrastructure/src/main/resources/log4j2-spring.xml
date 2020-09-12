@@ -21,7 +21,7 @@
   </Appenders>
 
   <Loggers>
-    <Logger additivity="false" level="INFO" name="com.lookiero.appname">
+    <Logger additivity="false" level="INFO" name="com.lookiero.quehayparacomer">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="RollingFile"/>
     </Logger>

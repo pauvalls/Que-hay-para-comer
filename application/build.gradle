@@ -10,9 +10,5 @@ apply from:'../gradle/pitest.gradle'
 dependencies {
   implementation project(':appname-back.domain')
 
-  implementation "com.lookiero.common.messagebus:core:${messageBusVersion}"
-  implementation "com.lookiero.common.request-response-management:error:${requestResponseManagementVersion}"
-  implementation "com.lookiero.common.request-response-management:bean-validation:${requestResponseManagementVersion}"
-
   compileOnly "org.slf4j:slf4j-api:${slf4jVersion}"
 }
