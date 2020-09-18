@@ -16,6 +16,7 @@ contracts {
     baseClassMapping(".*.successfully.*", "com.lookiero.appname.contract.base.SuccessfullyBase")
     baseClassMapping(".*.validationFailed.*", "com.lookiero.appname.contract.base.ValidationFailedBase")
     baseClassMapping(".*.notFound.*", "com.lookiero.appname.contract.base.NotFoundBase")
+    baseClassMapping(".*.CreateIngredientContract.*", "com.lookiero.appname.contract.base.CreateIngredientContractBase")
   }
 }
 

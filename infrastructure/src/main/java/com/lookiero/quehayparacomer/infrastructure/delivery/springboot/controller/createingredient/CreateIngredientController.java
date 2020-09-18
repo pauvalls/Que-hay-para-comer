@@ -2,9 +2,15 @@ package com.lookiero.quehayparacomer.infrastructure.delivery.springboot.controll
 
 import com.lookiero.quehayparacomer.application.CreateANewIngredient.CreateIngredient;
 import com.lookiero.quehayparacomer.application.CreateANewIngredient.CreateIngredientCommand;
+import com.lookiero.quehayparacomer.domain.model.ingredient.Ingredient;
 import com.lookiero.quehayparacomer.infrastructure.delivery.springboot.controller.createingredient.dto.CreateIngredientBodyRequestDTO;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import com.lookiero.quehayparacomer.infrastructure.delivery.springboot.controller.createingredient.dto.CreateIngredientBodyResponseDTO;
+import com.lookiero.quehayparacomer.infrastructure.delivery.springboot.controller.createingredient.dto.NutricionalValuesDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -17,10 +23,8 @@ public class CreateIngredientController {
     }
 
     @RequestMapping(value = "/ingredient/save", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-
-    public void CreateIngredient(@RequestBody CreateIngredientBodyRequestDTO createIngredientBodyRequestDTO) {
-        createIngredient.execute(
+    public ResponseEntity CreateIngredient(@RequestBody CreateIngredientBodyRequestDTO createIngredientBodyRequestDTO) {
+        final Ingredient response = createIngredient.execute(
                 CreateIngredientCommand
                         .builder()
                         .uuid(UUID.randomUUID().toString())
@@ -30,6 +34,18 @@ public class CreateIngredientController {
                         .azucar(createIngredientBodyRequestDTO.nutricionalValuesDTO.azucar)
                         .build()
         );
+        return ResponseEntity.ok(
+                CreateIngredientBodyResponseDTO
+                .builder()
+                .id(response.getIngredientid().toString())
+                .name(response.getIngredientName().name)
+                .nutricionalValuesDTO(
+                        new NutricionalValuesDTO(response.getIngredientNuticialValues().kcal,
+                                response.getIngredientNuticialValues().azucar,
+                                response.getIngredientNuticialValues().grasas
+                        )
+                ));
+
 
     }
 }

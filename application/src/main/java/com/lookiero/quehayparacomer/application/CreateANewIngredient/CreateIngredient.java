@@ -11,7 +11,7 @@ public class CreateIngredient {
         this.ingredientRepository = ingredientRepository;
     }
 
-    public void execute(CreateIngredientCommand createIngredientCommand) {
+    public Ingredient execute(CreateIngredientCommand createIngredientCommand) {
         final var ingredient = Ingredient
                 .builder()
                 .ingredientid(new IngredientId(UUID.fromString(createIngredientCommand.uuid)))
@@ -24,5 +24,6 @@ public class CreateIngredient {
                 .build();
 
         ingredientRepository.save(ingredient);
+        return ingredient;
     }
 }
