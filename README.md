@@ -21,7 +21,6 @@ Infrastructure is:
 * Spring cloud contract ready with common base for success/failed/validationfailed/notfound
 * Spring cloud streams ready with consumer & producer configuration scaffolding
 * Spring Data JPA ready
-* TKiero ready
 * Liquibase ready
 * Swagger ready
 
